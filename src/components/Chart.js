@@ -3,6 +3,7 @@ import Highcharts from "highcharts";
 import Exporting from "highcharts/modules/exporting";
 import HighchartsReact from "highcharts-react-official";
 import DarkUnica from "highcharts/themes/dark-unica";
+import axios from "axios";
 
 //import addSteamGraph from "highcharts/modules/streamgraph";
 //import addSeries from "highcharts/modules/series-label";
@@ -17,76 +18,84 @@ import DarkUnica from "highcharts/themes/dark-unica";
 Exporting(Highcharts);
 DarkUnica(Highcharts);
 
-function getData(n) {
-  var arr = [],
-    i,
-    x,
-    a,
-    b,
-    c,
-    spike;
-  for (
-    i = 0, x = Date.UTC(new Date().getUTCFullYear(), 0, 1) - n * 36e5;
-    i < n;
-    i = i + 1, x = x + 36e5
-  ) {
-    if (i % 100 === 0) {
-      a = 2 * Math.random();
-    }
-    if (i % 1000 === 0) {
-      b = 2 * Math.random();
-    }
-    if (i % 10000 === 0) {
-      c = 2 * Math.random();
-    }
-    if (i % 50000 === 0) {
-      spike = 10;
-    } else {
-      spike = 0;
-    }
-    arr.push([x, 2 * Math.sin(i / 100) + a + b + c + spike + Math.random()]);
+export class Chart extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    };
   }
-  return arr;
+  componentDidMount() {
+    axios.get(`http://localhost:3000/db.json`).then(res => {
+      this.setState({ data: res.data });
+    });
+  }
+
+  render() {
+    const options = {
+      chart: {
+        type: "area"
+      },
+      title: {
+        text:
+          "Historic and Estimated Worldwide Population Distribution by Region"
+      },
+      subtitle: {
+        text: "Source: Wikipedia.org"
+      },
+      xAxis: {
+        categories: ["1750", "1800", "1850", "1900", "1950", "1999", "2050"],
+        tickmarkPlacement: "on",
+        title: {
+          enabled: false
+        }
+      },
+      yAxis: {
+        title: {
+          text: "Percent"
+        }
+      },
+      tooltip: {
+        pointFormat:
+          '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b> ({point.y:,.0f} millions)<br/>',
+        split: true
+      },
+      plotOptions: {
+        area: {
+          stacking: "percent",
+          lineColor: "#ffffff",
+          lineWidth: 1,
+          marker: {
+            lineWidth: 1,
+            lineColor: "#ffffff"
+          }
+        }
+      },
+      series: [
+        {
+          name: "Asia",
+          data: [502, 635, 809, 947, 1402, 3634, 5268]
+        },
+        {
+          name: "Africa",
+          data: [106, 107, 111, 133, 221, 767, 1766]
+        },
+        {
+          name: "Europe",
+          data: [163, 203, 276, 408, 547, 729, 628]
+        },
+        {
+          name: "America",
+          data: [18, 31, 54, 156, 339, 818, 1201]
+        },
+        {
+          name: "Oceania",
+          data: [2, 2, 2, 6, 13, 30, 46]
+        }
+      ]
+    };
+    return <HighchartsReact highcharts={Highcharts} options={options} />;
+  }
 }
-var n = 500000,
-  data = getData(n);
-
-console.time("line");
-
-const options = {
-  chart: {
-    zoomType: "x",
-    height: 590
-  },
-
-  title: {
-    text: "Highcharts drawing " + n + " points"
-  },
-
-  subtitle: {
-    text: "Using the Boost module"
-  },
-
-  tooltip: {
-    valueDecimals: 2
-  },
-
-  xAxis: {
-    type: "datetime"
-  },
-
-  series: [
-    {
-      data: data,
-      lineWidth: 0.5,
-      name: "Hourly data points"
-    }
-  ]
-};
-console.timeEnd("line");
-
-const Chart = () => (
-  <HighchartsReact highcharts={Highcharts} options={options} />
-);
 
 export default Chart;
