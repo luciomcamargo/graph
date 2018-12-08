@@ -32,6 +32,12 @@ export class Chart extends React.Component {
 
   render() {
     const { briefdata, proposaldata, postlogdata, codes } = this.state;
+    Highcharts.setOptions({
+      lang: {
+        decimalPoint: ",",
+        thousandsSep: "."
+      }
+    });
     const options = {
       title: {
         text: ""
@@ -54,9 +60,14 @@ export class Chart extends React.Component {
         headerFormat: "<small>{point.key}</small><table>",
         pointFormat:
           '<tr><td style="color: {series.color}">{series.name}: </td>' +
-          '<td style="text-align: right"><b>{point.y} €</b></td></tr>',
+          '<td style="text-align: right"><b>{point.y}€</b></td></tr>',
         footerFormat: "</table>",
         valueDecimals: 2
+      },
+      plotOptions: {
+        series: {
+          pointPadding: 0
+        }
       },
 
       xAxis: {
