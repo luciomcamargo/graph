@@ -48,6 +48,16 @@ export class Chart extends React.Component {
         layout: "horizontal",
         symbolRadius: 0
       },
+      tooltip: {
+        shared: true,
+        useHTML: true,
+        headerFormat: "<small>{point.key}</small><table>",
+        pointFormat:
+          '<tr><td style="color: {series.color}">{series.name}: </td>' +
+          '<td style="text-align: right"><b>{point.y} €</b></td></tr>',
+        footerFormat: "</table>",
+        valueDecimals: 2
+      },
 
       xAxis: {
         categories: codes,
@@ -59,6 +69,7 @@ export class Chart extends React.Component {
       yAxis: {
         title: null,
         allowDecimals: false,
+        tickAmount: 4,
 
         labels: {
           formatter: function() {
