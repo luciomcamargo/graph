@@ -26,7 +26,7 @@ export class Chart extends React.Component {
     };
   }
   componentDidMount() {
-    axios.get(`http://localhost:3000/db.json`).then(res => {
+    axios.get(`db.json`).then(res => {
       this.setState({ data: res.data });
     });
   }
