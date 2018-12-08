@@ -1,57 +1,127 @@
 import React from "react";
-import Highcharts from "highcharts/highstock";
+import Highcharts from "highcharts";
 import Exporting from "highcharts/modules/exporting";
 import HighchartsReact from "highcharts-react-official";
-import DarkUnica from "highcharts/themes/dark-unica";
 import axios from "axios";
 
-//import addSteamGraph from "highcharts/modules/streamgraph";
-//import addSeries from "highcharts/modules/series-label";
-//import addAnnotations from "highcharts/modules/annotations";
-//import addExporting from "highcharts/modules/exporting";
-
-//addSteamGraph(Highcharts);
-//addSeries(Highcharts);
-//addAnnotations(Highcharts);
-//addExporting(Highcharts);
-
 Exporting(Highcharts);
-DarkUnica(Highcharts);
 
 export class Chart extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      briefdata: [],
+      proposaldata: [],
+      postlogdata: [],
+      codes: []
     };
   }
   componentDidMount() {
-    axios.get(`db.json`).then(res => {
-      this.setState({ data: res.data });
+    axios.get(`data.json`).then(res => {
+      let briefdata = res.data.map(brief => brief.briefNetSpendInEuro);
+      let proposaldata = res.data.map(proposal => proposal.proposalSpendInEuro);
+      let postlogdata = res.data.map(postlog => postlog.postNetSpendInEuro);
+      let codes = res.data.map(code => code.mip.code);
+
+      this.setState({ briefdata: briefdata });
+      this.setState({ proposaldata: proposaldata });
+      this.setState({ postlogdata: postlogdata });
+      this.setState({ codes: codes });
     });
   }
 
   render() {
+    const { briefdata, proposaldata, postlogdata, codes } = this.state;
     const options = {
       title: {
-        text: "My stock chart"
+        text: ""
       },
       chart: {
+        type: "column",
         height: 590
       },
+      colors: ["#74A146", "#F6AA3D", "#6E757B"],
+
+      legend: {
+        align: "center",
+        verticalAlign: "top",
+        layout: "horizontal",
+        symbolRadius: 0
+      },
+
+      xAxis: {
+        categories: codes,
+        labels: {
+          x: -10
+        }
+      },
+
+      yAxis: {
+        title: null,
+        allowDecimals: false,
+
+        labels: {
+          formatter: function() {
+            return this.axis.defaultLabelFormatter.call(this) + " €";
+          }
+        }
+      },
+
       series: [
         {
-          data: this.state.data
+          id: 259,
+          name: "Brief",
+
+          data: briefdata
+        },
+        {
+          id: 265,
+          name: "Proposal",
+
+          data: proposaldata
+        },
+        {
+          id: 264,
+          name: "Postlog Spend",
+
+          data: postlogdata
         }
-      ]
+      ],
+
+      responsive: {
+        rules: [
+          {
+            condition: {
+              maxWidth: 500
+            },
+            chartOptions: {
+              legend: {
+                align: "center",
+                verticalAlign: "bottom",
+                layout: "horizontal"
+              },
+              yAxis: {
+                labels: {
+                  align: "left",
+                  x: 0,
+                  y: -5
+                },
+                title: {
+                  text: null
+                }
+              },
+              subtitle: {
+                text: null
+              },
+              credits: {
+                enabled: false
+              }
+            }
+          }
+        ]
+      }
     };
-    return (
-      <HighchartsReact
-        highcharts={Highcharts}
-        constructorType={"stockChart"}
-        options={options}
-      />
-    );
+    return <HighchartsReact highcharts={Highcharts} options={options} />;
   }
 }
 
