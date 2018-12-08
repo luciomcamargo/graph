@@ -71,16 +71,14 @@ export class Chart extends React.Component {
       },
 
       xAxis: {
-        categories: codes,
-        labels: {
-          x: -10
-        }
+        categories: codes
       },
 
       yAxis: {
         title: null,
         allowDecimals: false,
         tickAmount: 4,
+        tickPositions: [0, 10000, 20000, 30000],
 
         labels: {
           formatter: function() {
