@@ -36,6 +36,7 @@ class Tags extends React.Component {
           tags={tags}
           handleDelete={this.handleDelete}
           handleAddition={this.handleAddition}
+          allowDragDrop={false}
         />
       </div>
     );
