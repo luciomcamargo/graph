@@ -1,8 +1,8 @@
-import React from "react";
-import Highcharts from "highcharts";
-import Exporting from "highcharts/modules/exporting";
-import HighchartsReact from "highcharts-react-official";
-import axios from "axios";
+import React from 'react';
+import Highcharts from 'highcharts';
+import Exporting from 'highcharts/modules/exporting';
+import HighchartsReact from 'highcharts-react-official';
+import axios from 'axios';
 
 Exporting(Highcharts);
 
@@ -34,34 +34,34 @@ export class Chart extends React.Component {
     const { briefdata, proposaldata, postlogdata, codes } = this.state;
     Highcharts.setOptions({
       lang: {
-        decimalPoint: ",",
-        thousandsSep: "."
+        decimalPoint: ',',
+        thousandsSep: '.'
       }
     });
     const options = {
       title: {
-        text: ""
+        text: ''
       },
       chart: {
-        type: "column",
+        type: 'column',
         height: 590
       },
-      colors: ["#74A146", "#F6AA3D", "#6E757B"],
+      colors: ['#74A146', '#F6AA3D', '#6E757B'],
 
       legend: {
-        align: "center",
-        verticalAlign: "top",
-        layout: "horizontal",
+        align: 'center',
+        verticalAlign: 'top',
+        layout: 'horizontal',
         symbolRadius: 0
       },
       tooltip: {
         shared: true,
         useHTML: true,
-        headerFormat: "<small>{point.key}</small><table>",
+        headerFormat: '<small>{point.key}</small><table>',
         pointFormat:
           '<tr><td style="color: {series.color}">{series.name}: </td>' +
           '<td style="text-align: right"><b>{point.y}€</b></td></tr>',
-        footerFormat: "</table>",
+        footerFormat: '</table>',
         valueDecimals: 2
       },
       plotOptions: {
@@ -71,7 +71,13 @@ export class Chart extends React.Component {
       },
 
       xAxis: {
-        categories: codes
+        categories: codes,
+        labels: {
+          formatter: function() {
+            if (this.value === 'ALJ') return this.value + ' (QA)';
+            else return this.value + ' (AE)';
+          }
+        }
       },
 
       yAxis: {
@@ -82,7 +88,7 @@ export class Chart extends React.Component {
 
         labels: {
           formatter: function() {
-            return this.axis.defaultLabelFormatter.call(this) + " €";
+            return this.axis.defaultLabelFormatter.call(this) + ' €';
           }
         }
       },
@@ -90,19 +96,19 @@ export class Chart extends React.Component {
       series: [
         {
           id: 259,
-          name: "Brief",
+          name: 'Brief',
 
           data: briefdata
         },
         {
           id: 265,
-          name: "Proposal",
+          name: 'Proposal',
 
           data: proposaldata
         },
         {
           id: 264,
-          name: "Postlog Spend",
+          name: 'Postlog Spend',
 
           data: postlogdata
         }
@@ -116,13 +122,13 @@ export class Chart extends React.Component {
             },
             chartOptions: {
               legend: {
-                align: "center",
-                verticalAlign: "bottom",
-                layout: "horizontal"
+                align: 'center',
+                verticalAlign: 'bottom',
+                layout: 'horizontal'
               },
               yAxis: {
                 labels: {
-                  align: "left",
+                  align: 'left',
                   x: 0,
                   y: -5
                 },
