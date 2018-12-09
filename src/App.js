@@ -6,7 +6,7 @@ const divStyle = {
   display: 'flex',
   border: 'solid',
   borderWidth: '1px',
-  marginLeft: '70vw',
+  marginLeft: '65vw',
   marginRight: '0.5vw'
 };
 
