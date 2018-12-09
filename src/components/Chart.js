@@ -44,7 +44,7 @@ export class Chart extends React.Component {
       },
       chart: {
         type: 'column',
-        height: 590
+        height: 540
       },
       colors: ['#74A146', '#F6AA3D', '#6E757B'],
 

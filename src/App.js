@@ -1,9 +1,29 @@
-import React, { Component } from "react";
-import Chart from "./components/Chart";
+import React, { Component } from 'react';
+import Chart from './components/Chart';
+import Tags from './components/Tags';
+
+const divStyle = {
+  display: 'flex',
+  border: 'solid',
+  borderWidth: '1px',
+  marginLeft: '70vw',
+  marginRight: '0.5vw'
+};
 
 class App extends Component {
   render() {
-    return <Chart />;
+    return (
+      <div>
+        <div style={divStyle}>
+          <Tags />
+          <i className='fas fa-caret-down' />
+        </div>
+
+        <div>
+          <Chart />
+        </div>
+      </div>
+    );
   }
 }
 
