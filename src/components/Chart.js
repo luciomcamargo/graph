@@ -69,6 +69,9 @@ export class Chart extends React.Component {
           pointPadding: 0
         }
       },
+      credits: {
+        enabled: false
+      },
 
       xAxis: {
         categories: codes,
