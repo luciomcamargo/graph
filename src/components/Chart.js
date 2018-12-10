@@ -6,6 +6,49 @@ import axios from 'axios';
 
 Exporting(Highcharts);
 
+function justifyColumns(chart) {
+  var categoriesWidth =
+      chart.plotSizeX / (1 + chart.xAxis[0].max - chart.xAxis[0].min),
+    distanceBetweenColumns = 0,
+    each = Highcharts.each,
+    sum,
+    categories = chart.xAxis[0].categories,
+    number;
+
+  for (var i = 0; i < categories.length; i++) {
+    sum = 0;
+    each(chart.series, function(p, k) {
+      if (p.visible) {
+        each(p.data, function(ob, j) {
+          if (ob.category == categories[i] && ob.y !== null) {
+            sum++;
+          }
+        });
+      }
+    });
+
+    distanceBetweenColumns = categoriesWidth / (sum + 1);
+    number = 1;
+
+    each(chart.series, function(p, k) {
+      if (p.visible) {
+        each(p.data, function(ob, j) {
+          if (ob.category == categories[i] && ob.y !== null) {
+            if (sum !== chart.series.length) {
+              ob.graphic.element.x.baseVal.value =
+                i * categoriesWidth +
+                distanceBetweenColumns * number -
+                ob.pointWidth / 2;
+            }
+
+            number++;
+          }
+        });
+      }
+    });
+  }
+}
+
 export class Chart extends React.Component {
   constructor(props) {
     super(props);
@@ -23,10 +66,12 @@ export class Chart extends React.Component {
       let postlogdata = res.data.map(postlog => postlog.postNetSpendInEuro);
       let codes = res.data.map(code => code.mip.code);
 
-      this.setState({ briefdata: briefdata });
-      this.setState({ proposaldata: proposaldata });
-      this.setState({ postlogdata: postlogdata });
-      this.setState({ codes: codes });
+      this.setState({
+        briefdata: briefdata,
+        proposaldata: proposaldata,
+        postlogdata: postlogdata,
+        codes: codes
+      });
     });
   }
 
@@ -44,7 +89,12 @@ export class Chart extends React.Component {
       },
       chart: {
         type: 'column',
-        height: 540
+        height: 540,
+        events: {
+          render() {
+            justifyColumns(this);
+          }
+        }
       },
       colors: ['#74A146', '#F6AA3D', '#6E757B'],
 
@@ -66,7 +116,8 @@ export class Chart extends React.Component {
       },
       plotOptions: {
         series: {
-          pointPadding: 0
+          pointPadding: 0,
+          groupPadding: 0
         }
       },
       credits: {
