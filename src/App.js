@@ -5,9 +5,8 @@ import Tags from './components/Tags';
 const divStyle = {
   display: 'flex',
   border: 'solid',
-  borderWidth: '1px',
-  marginLeft: '65vw',
-  marginRight: '0.5vw'
+  borderWidth: '0.07vw',
+  marginLeft: '70vw'
 };
 
 class App extends Component {

@@ -2,19 +2,19 @@
   display: none;
 }
 .ReactTags__selected span.ReactTags__tag {
-  border: 1px solid #ddd;
+  border: 0.07vw solid #ddd;
   background: #eee;
-  font-size: 12px;
+  font-size: 1.2vw;
   display: inline-block;
-  padding: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin: 2px;
-  border-radius: 2px;
+  padding: 0.3vh;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
+  margin: 0.1vw;
+  border-radius: 0.1vw;
   font-weight: bold;
 }
 .ReactTags__selected a.ReactTags__remove {
   color: #aaa;
-  margin-left: 5px;
+  margin-left: 0.1vw;
   cursor: pointer;
 }
